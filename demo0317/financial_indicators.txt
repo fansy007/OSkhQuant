@@ -1,0 +1,34 @@
+# xtquant 财务指标中英文对照表
+# 文件: financial_indicators.txt
+# 用途: 选股系统配置文件中使用
+
+# ========== 利润表 (Income) ==========
+# 字段名(英文),中文名称
+revenue,营业总收入
+oper_profit,营业利润
+net_profit_incl_min_int_inc_after,净利润(扣除非经常性损益后)
+# ========== 现金流量表 (CashFlow) ==========
+net_cash_flows_oper_act,经营活动产生的现金流量净额
+net_cash_flows_inv_act,投资活动产生的现金流量净额
+net_cash_flows_fnc_act,筹资活动产生的现金流量净额
+# ========== 每股指标 (PershareIndex) ==========
+du_return_on_equity,净资产收益率
+inc_revenue_rate,主营收入同比增长
+adjusted_net_profit_rate,扣非净利润同比增长
+gross_profit,毛利率
+net_profit,净利率
+gear_ratio,资产负债比率
+
+# ========== 常用配置示例 ==========
+# 静态条件配置示例 (s_开头):
+# s_net_profit,>,50000000          # 净利润 > 5000万
+# s_cashflow,>,50000000            # 经营现金流 > 5000万
+# s_revenue,>,100000000            # 营业收入 > 1亿
+# s_undistributed_profit,>,0       # 未分配利润 > 0
+# s_roe,>,10                        # 净资产收益率 > 10%
+
+# 动态条件配置示例 (d_开头):
+# d_net_profit,>,1                 # 净利润同比增长(连续1年)
+# d_cashflow,>,1                  # 经营现金流同比增长(连续1年)
+# d_revenue,>,1                   # 营业收入同比增长(连续1年)
+# d_roe,>,1                       # 净资产收益率同比增长(连续1年)

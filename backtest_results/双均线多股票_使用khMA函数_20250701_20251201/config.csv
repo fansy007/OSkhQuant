@@ -1,0 +1,2 @@
+﻿start_time,end_time,init_capital,benchmark,strategy_file,actual_start_time,actual_end_time,total_runtime_seconds,total_runtime_formatted
+20250701,20251201,1000000.0,000300.SH,E:/workspace/OSkhQuant/strategies/双均线多股票_使用khMA函数.py,2025-12-01 11:36:05,,0,0小时0分钟0秒

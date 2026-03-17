@@ -1,0 +1,43 @@
+# 买入条件配置文件
+
+# ========== 行业条件 ==========
+industry,创业板
+
+# ========== 技术指标 ==========
+# 换手率: 天数, 换手率阈值, 日均阈值
+turnover,10,5,2
+
+# ========== 买入门槛 ==========
+# 现金超过此金额才进行买入（单位：元）
+min_buy_amount,50000
+
+# ========== 常用财务指标一览 ==========
+# ========== 利润表 (Income) ==========
+# 字段名(英文),中文名称
+#revenue,营业总收入
+#oper_profit,营业利润
+#net_profit_incl_min_int_inc_after,净利润(扣除非经常性损益后)
+# ========== 现金流量表 (CashFlow) ==========
+#net_cash_flows_oper_act,经营活动产生的现金流量净额
+#net_cash_flows_inv_act,投资活动产生的现金流量净额
+#net_cash_flows_fnc_act,筹资活动产生的现金流量净额
+# ========== 每股指标 (PershareIndex) ==========
+#du_return_on_equity,净资产收益率
+#inc_revenue_rate,主营收入同比增长
+#adjusted_net_profit_rate,扣非净利润同比增长
+#gross_profit,毛利率
+#net_profit,净利率
+#gear_ratio,资产负债比率
+# ========== 常用财务指标一览end ==========
+
+# ========== 财务指标 - 静态条件 ==========
+# 格式: s_字段,比较符,值 (只拿Q4数据，与固定值比较)
+s_revenue,>,100000000
+s_oper_profit,>,10000000
+s_net_profit_incl_min_int_inc_after,>,100000000
+
+# ========== 财务指标 - 动态条件 ==========
+# 格式: d_字段,比较符,N (最新一期与前N年同期比较，连续N年增长)
+d_revenue,>,2
+d_net_profit_incl_min_int_inc_after,>,2
+adjusted_net_profit_rate,>,2

@@ -1,17 +1,21 @@
-# KhQuant 看海量化交易系统 - Git忽略文件
+xtquant
+# --------------------
+# Python 特定忽略规则
+# --------------------
 
-# ===== Python 相关 =====
-# 字节码文件
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
+# 字节码编译/优化/DLL 文件
+__pycache__/           # Python 字节代码缓存目录
+*.py[cod]              # 具体的字节码文件后缀
+*$py.class             # 其他形式的字节码文件
 
-# 分发/打包
+# C 扩展
+*.so                   # 编译后的 C 扩展模块
+
+# 分发 / 打包 / 发布文件
 .Python
-build/
+build/                 # 构建过程中生成的临时目录
 develop-eggs/
-dist/
+dist/                  # 打包后生成的分发文件目录
 downloads/
 eggs/
 .eggs/
@@ -21,7 +25,7 @@ parts/
 sdist/
 var/
 wheels/
-*.egg-info/
+*.egg-info/           # 包元信息
 .installed.cfg
 *.egg
 MANIFEST
@@ -30,233 +34,84 @@ MANIFEST
 *.manifest
 *.spec
 
-# 单元测试
+# 安装器日志
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 单元测试 / 覆盖率报告
 htmlcov/
-.tox/
+.tox/                 # tox 虚拟环境目录
+.nox/
 .coverage
 .coverage.*
 .cache
-.pytest_cache/
 nosetests.xml
 coverage.xml
 *.cover
+*.py,cover
 .hypothesis/
+.pytest_cache/        # Pytest 缓存
+cover/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# celery beat
-celerybeat-schedule
-
-# SageMath parsed files
-*.sage.py
-
-# 虚拟环境
-.env
+# 虚拟环境（务必忽略！）
+.env                  # 环境变量文件（常含敏感信息）
 .venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
-khquant_env/
 
-# Spyder project settings
-.spyderproject
-.spyproject
+# 特定框架文件
+# Django
+*.log
+local_settings.py     # 本地 Django 配置
+db.sqlite3            # 开发用的 SQLite 数据库
+db.sqlite3-journal
 
-# Rope project settings
-.ropeproject
+# Flask
+instance/
+.webassets-cache
 
-# mkdocs documentation
-/site
+# Scrapy
+.scrapy
 
-# mypy
-.mypy_cache/
+# Jupyter Notebook
+.ipynb_checkpoints    # Jupyter 检查点
+
+# IPython
+profile_default/
+ipython_config.py
+
+# 类型检查器
+.mypy_cache/          # MyPy 缓存
 .dmypy.json
 dmypy.json
+.pyre/                # Pyre 类型检查器
+.pytype/              # Pytype 分析器
 
-# ===== 量化交易系统特定 =====
-# 配置文件（可能包含敏感信息）
-configs/*.kh
-configs/temp_*.kh
-configs/temp_running_config.kh
-*.config
-config.json
-settings.ini
-
-# 日志文件
-logs/
-*.log
-app.log
-debug.log
-error.log
-trade.log
-
-# 数据文件
-data/stock_list/
-data/cache/
-data/download/
-data/*.csv
-data/*.xlsx
-data/*.db
-data/*.sqlite
-data/*.sqlite3
-
-# 回测结果
-backtest_results/
-results/
-reports/
-
-# 交易记录（敏感）
-trades/
-positions/
-portfolio/
-account_info/
-
-# 临时文件
-temp/
-tmp/
-*.tmp
-*.temp
-.temp/
-
-# 缓存文件
-cache/
-.cache/
-*.cache
-
-# ===== IDE 和编辑器 =====
-# VSCode
-.vscode/
-*.code-workspace
-
-# PyCharm
-.idea/
-*.iml
-*.ipr
-*.iws
-
-# Sublime Text
-*.sublime-project
-*.sublime-workspace
-
-# Vim
-*.swp
-*.swo
-*~
-
-# Emacs
-*~
-\#*\#
-/.emacs.desktop
-/.emacs.desktop.lock
-*.elc
-auto-save-list
-tramp
-
-# ===== 系统文件 =====
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-*.cab
-*.msi
-*.msm
-*.msp
-*.lnk
+# --------------------
+# 操作系统特定文件
+# --------------------
 
 # macOS
-.DS_Store
+.DS_Store             # macOS 目录自定义属性文件
 .AppleDouble
 .LSOverride
-Icon
-._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
 
-# Linux
-*~
+# --------------------
+# IDE 和编辑器文件
+# --------------------
 
-# ===== 量化交易平台特定 =====
-# QMT/XtQuant 相关
-userdata_mini/
-*.db-journal
+# PyCharm
+.idea/                # PyCharm 项目配置
 
-# VNPy 相关（已卸载，但预防）
-.vntrader/
-vnpy_*/
+# VS Code
+.vscode/              # VS Code 工作区设置
+*.code-workspace
 
-# 其他交易平台
-tqsdk/
-akshare/
-
-# ===== 安全敏感信息 =====
-# API密钥和令牌
-*.key
-*.pem
-*.p12
-*.pfx
-api_keys.txt
-secrets.json
-.secrets
-.env.local
-.env.production
-
-# 账户信息
-account.json
-user_info.json
-*.account
-
-# 激活和许可证文件
-license.txt
-activation.key
-machine_code.txt
-
-# ===== 其他 =====
-# 备份文件
-*.bak
-*.backup
-backup/
-
-# 压缩文件
-*.zip
-*.rar
-*.7z
-*.tar.gz
-*.tar.bz2
-
-# 大文件（超过100MB的数据文件）
-*.parquet
-*.h5
-*.hdf5
-
-# 本地测试文件
-test_*.py
-*_test.py
-playground/
-sandbox/
-
-# 文档生成
-docs/_build/
-doc/_build/ 
-__pycache__/
-app.log
+# --------------------
+# 项目自定义规则
+# --------------------
+# 你可以在此添加项目特定的忽略规则
+# 例如：logs/、uploads/、本地配置文件等

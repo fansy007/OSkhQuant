@@ -610,7 +610,7 @@ class KhQuantFramework:
         # 固定为回测模式，批量下载历史数据（增量下载）
         download_complete = False
         
-        def download_progress(progress):
+        def  download_progress(progress):
             nonlocal download_complete
             print(f"下载进度: {progress}")
             if progress['finished'] >= progress['total']:
