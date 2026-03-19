@@ -29,7 +29,7 @@ turnover,10,5,2
 
 # ========== 财务指标 - 静态条件 ==========
 # 格式: s_字段,比较符,值 (只拿Q4数据，与固定值比较)
-s_revenue,>,500000000
+s_revenue,>,100000000
 s_oper_profit,>,50000000
 s_net_profit_incl_min_int_inc_after,>,500000000
 
