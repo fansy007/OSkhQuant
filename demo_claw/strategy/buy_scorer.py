@@ -14,6 +14,25 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
+# 加载配置文件
+def _load_config():
+    """从配置文件加载参数"""
+    config = {}
+    config_path = os.path.join(os.path.dirname(__file__), 'buy_technique_strategy.config')
+    if os.path.exists(config_path):
+        with open(config_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                if ',' in line:
+                    key, value = line.split(',', 1)
+                    config[key.strip()] = value.strip()
+    return config
+
+# 全局配置
+_CONFIG = _load_config()
+
 # 禁用打印（回测时不输出详细信息）
 _print = print
 print = lambda *args, **kwargs: None
@@ -22,7 +41,7 @@ print = lambda *args, **kwargs: None
 class StockScorer:
     """股票评分器 - 用于回测"""
 
-    def __init__(self, price_volume_weight=0.6, fundamental_weight=0.4, xtdata=None):
+    def __init__(self, price_volume_weight=0.6, fundamental_weight=0.4, xtdata=None, ma_period=None):
         """
         初始化评分器
 
@@ -30,12 +49,19 @@ class StockScorer:
             price_volume_weight: 量价形态权重，默认0.6
             fundamental_weight: 基本面权重，默认0.4
             xtdata: xtquant数据对象（必传）
+            ma_period: 均线周期，默认从配置读取（如配置为空则默认20）
         """
         if abs(price_volume_weight + fundamental_weight - 1.0) > 0.001:
             raise ValueError(f"权重之和必须等于1，当前：{price_volume_weight + fundamental_weight}")
 
         self.pv_weight = price_volume_weight
         self.fund_weight = fundamental_weight
+
+        # 均线周期：从配置读取或使用默认值
+        if ma_period is not None:
+            self.ma_period = ma_period
+        else:
+            self.ma_period = int(_CONFIG.get('ma_period', 20))
 
         if xtdata is not None:
             self.xtdata = xtdata
@@ -306,10 +332,10 @@ class StockScorer:
         price_10peak = close.tail(10).max()
         drawdown = (close.iloc[-1] - price_10peak) / price_10peak if price_10peak > 0 else 0
 
-        # MA20
-        ma20 = close.rolling(20).mean()
-        ma20_current = ma20.iloc[-1]
-        ma20_slope = (ma20.iloc[-1] - ma20.iloc[-2]) / ma20.iloc[-2] if len(ma20) >= 2 and ma20.iloc[-2] != 0 else 0
+        # MA（可配置周期）
+        ma = close.rolling(self.ma_period).mean()
+        ma_current = ma.iloc[-1]
+        ma_slope = (ma.iloc[-1] - ma.iloc[-2]) / ma.iloc[-2] if len(ma) >= 2 and ma.iloc[-2] != 0 else 0
 
         # 当日涨跌
         pct_change = (close.iloc[-1] - close.iloc[-2]) / close.iloc[-2] if len(close) >= 2 else 0
@@ -319,16 +345,16 @@ class StockScorer:
         score = 0
         description = ""
 
-        if vol_ratio < 0.40 and (-0.15 < drawdown < -0.10) and ma20_slope > 0:
+        if vol_ratio < 0.40 and (-0.15 < drawdown < -0.10) and ma_slope > 0:
             score = 10
             description = "完美缩量回调"
-        elif vol_ratio < 0.50 and (-0.15 < drawdown < -0.08) and ma20_slope > 0:
+        elif vol_ratio < 0.50 and (-0.15 < drawdown < -0.08) and ma_slope > 0:
             score = 9
             description = "优秀缩量回调"
-        elif vol_ratio < 0.60 and (-0.15 < drawdown < -0.08) and ma20_slope > 0:
+        elif vol_ratio < 0.60 and (-0.15 < drawdown < -0.08) and ma_slope > 0:
             score = 8
             description = "理想缩量回调"
-        elif vol_ratio < 0.60 and drawdown < -0.06 and ma20_slope > 0:
+        elif vol_ratio < 0.60 and drawdown < -0.06 and ma_slope > 0:
             score = 7
             description = "较好缩量回调"
         elif vol_ratio < 0.70 and drawdown < -0.05:
@@ -359,8 +385,9 @@ class StockScorer:
                 "drawdown_pct": round(drawdown * 100, 1),
                 "price_10peak": round(price_10peak, 2),
                 "current_price": round(close.iloc[-1], 2),
-                "ma20": round(ma20_current, 2),
-                "ma20_slope_pct": round(ma20_slope * 100, 2),
+                "ma": round(ma_current, 2),
+                "ma_period": self.ma_period,
+                "ma_slope_pct": round(ma_slope * 100, 2),
                 "pct_change_pct": round(pct_change * 100, 2),
             },
             "description": description
